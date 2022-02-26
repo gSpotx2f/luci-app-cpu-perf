@@ -1,0 +1,108 @@
+#!/bin/sh /etc/rc.common
+
+START=91
+
+APP_NAME="cpu-perf"
+SYSFS_CPU_DIR="/sys/devices/system/cpu"
+
+config_load $APP_NAME
+
+get_cpus() {
+	echo `ls /sys/devices/system/cpu | grep "^cpu[0-9]*$"`
+}
+
+reset_config() {
+	while uci -q delete ${APP_NAME}.@cpu[0]; do :; done
+	for i in `get_cpus`
+	do
+		uci set ${APP_NAME}.${i}="cpu"
+	done
+	uci commit
+}
+
+CPU_UCI_SECTIONS=0
+CPU_DEVICES=`get_cpus | wc -w`
+
+cpu_sections_counter() {
+	CPU_UCI_SECTIONS=$(($CPU_UCI_SECTIONS + 1))
+}
+
+check_cpu_sections() {
+	CPU_UCI_SECTIONS=0
+	config_foreach cpu_sections_counter cpu
+	if [ $CPU_UCI_SECTIONS -ne $CPU_DEVICES ]; then
+		reset_config
+	fi
+}
+
+set_perf() {
+	local cpu=$1
+	local scaling_min_freq scaling_max_freq scaling_governor
+	local cpu_dir="${SYSFS_CPU_DIR}/${cpu}/cpufreq"
+
+	[ ! -d $cpu_dir ] && return
+
+	local scaling_min_freq_file="${cpu_dir}/scaling_min_freq"
+	local scaling_max_freq_file="${cpu_dir}/scaling_max_freq"
+	local scaling_governor_file="${cpu_dir}/scaling_governor"
+
+	config_get scaling_min_freq $cpu scaling_min_freq
+	config_get scaling_max_freq $cpu scaling_max_freq
+	config_get scaling_governor $cpu scaling_governor
+
+	if [ -n "$scaling_min_freq" -a -w "$scaling_min_freq_file" ]; then
+		echo $scaling_min_freq > $scaling_min_freq_file
+	fi
+	if [ -n "$scaling_max_freq" -a -w "$scaling_max_freq_file" ]; then
+		echo $scaling_max_freq > $scaling_max_freq_file
+	fi
+	if [ -n "$scaling_governor" -a -w "$scaling_governor_file" ]; then
+		echo $scaling_governor > $scaling_governor_file
+	fi
+}
+
+reset_perf() {
+	local cpu=$1
+	local cpu_dir="${SYSFS_CPU_DIR}/${cpu}/cpufreq"
+
+	[ ! -d $cpu_dir ] && return
+
+	local min_freq_file="${cpu_dir}/cpuinfo_min_freq"
+	local max_freq_file="${cpu_dir}/cpuinfo_max_freq"
+	local scaling_min_freq_file="${cpu_dir}/scaling_min_freq"
+	local scaling_max_freq_file="${cpu_dir}/scaling_max_freq"
+	local scaling_governor_file="${cpu_dir}/scaling_governor"
+
+	if [ -r "$min_freq_file" -a -w "$scaling_min_freq_file" ]; then
+		echo `cat $min_freq_file` > $scaling_min_freq_file
+	fi
+	if [ -r "$max_freq_file" -a -w "$scaling_max_freq_file" ]; then
+		echo `cat $max_freq_file` > $scaling_max_freq_file
+	fi
+	if [ -w "$scaling_governor_file" ]; then
+		echo "schedutil" > $scaling_governor_file 2> /dev/null
+		if [ $? -ne 0 ]; then
+			echo "ondemand" > $scaling_governor_file 2> /dev/null
+			if [ $? -ne 0 ]; then
+				echo "conservative" > $scaling_governor_file 2> /dev/null
+			fi
+		fi
+	fi
+}
+
+start() {
+	local enabled
+	if [ -r "/etc/config/${APP_NAME}" ]; then
+		enabled=`uci get ${APP_NAME}.config.enabled`
+		check_cpu_sections
+		if [ "$enabled" = "1" ]; then
+			config_foreach set_perf cpu
+		fi
+	else
+		exit 1
+	fi
+}
+
+stop() {
+	config_foreach reset_perf cpu
+}

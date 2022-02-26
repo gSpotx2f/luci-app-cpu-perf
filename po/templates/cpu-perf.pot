@@ -1,0 +1,96 @@
+msgid ""
+msgstr "Content-Type: text/plain; charset=UTF-8"
+
+msgid "An error has occurred"
+msgstr ""
+
+msgid "CPU"
+msgstr ""
+
+msgid "CPU Performance"
+msgstr ""
+
+msgid "CPU performance information and management."
+msgstr ""
+
+msgid "CPU performance scaling not available..."
+msgstr ""
+
+msgid "Command failed"
+msgstr ""
+
+msgid "Current frequency"
+msgstr ""
+
+msgid "Disabled"
+msgstr ""
+
+msgid "Enable"
+msgstr ""
+
+msgid "Enabled"
+msgstr ""
+
+msgid "Failed to get %s init status: %s"
+msgstr ""
+
+msgid "Frequency value must not be"
+msgstr ""
+
+msgid "GHz"
+msgstr ""
+
+msgid "MHz"
+msgstr ""
+
+msgid "Maximum frequency"
+msgstr ""
+
+msgid "Maximum frequency the CPU is allowed to be running."
+msgstr ""
+
+msgid "Maximum scaling frequency"
+msgstr ""
+
+msgid "Minimum frequency"
+msgstr ""
+
+msgid "Minimum frequency the CPU is allowed to be running."
+msgstr ""
+
+msgid "Minimum scaling frequency"
+msgstr ""
+
+msgid "No performance data..."
+msgstr ""
+
+msgid "Performance managment"
+msgstr ""
+
+msgid "Performance scaling not available for this CPU..."
+msgstr ""
+
+msgid "Run at startup"
+msgstr ""
+
+msgid "Scaling governor"
+msgstr ""
+
+msgid ""
+"Scaling governors implement algorithms to estimate the required CPU capacity."
+msgstr ""
+
+msgid "Service action failed \"%s %s\": %s"
+msgstr ""
+
+msgid "default value:"
+msgstr ""
+
+msgid "higher"
+msgstr ""
+
+msgid "lower"
+msgstr ""
+
+msgid "than the"
+msgstr ""
