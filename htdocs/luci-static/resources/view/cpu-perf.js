@@ -298,7 +298,7 @@ return view.extend({
 				let cpuNum      = Number(sectionName.replace('cpu', ''));
 				let o;
 				let s = m.section(form.NamedSection, sectionName, 'cpu',
-					'CPU' + cpuNum);
+					_('CPU') + ' ' + cpuNum);
 
 				if(cpuPerfDataArray[cpuNum]) {
 					if(cpuPerfDataArray[cpuNum].sAvailGovernors &&
