@@ -19,6 +19,12 @@ msgstr ""
 msgid "Command failed"
 msgstr ""
 
+msgid "Conservative governor"
+msgstr ""
+
+msgid "Conservative tunables"
+msgstr ""
+
 msgid "Current frequency"
 msgstr ""
 
@@ -34,10 +40,25 @@ msgstr ""
 msgid "Failed to get %s init status: %s"
 msgstr ""
 
+msgid "Frequency decrease deferral factor."
+msgstr ""
+
+msgid "Frequency step in percent of the maximum frequency the governor is allowed to set."
+msgstr ""
+
 msgid "Frequency value must not be"
 msgstr ""
 
 msgid "GHz"
+msgstr ""
+
+msgid "If checked, it will cause the CPU load estimation code to treat the CPU time spent on executing tasks with \"nice\" levels greater than 0 as CPU idle time."
+msgstr ""
+
+msgid "If the estimated CPU load is above this value (in percent), the governor will set the frequency to the maximum value."
+msgstr ""
+
+msgid "KHz"
 msgstr ""
 
 msgid "MHz"
@@ -64,6 +85,12 @@ msgstr ""
 msgid "No performance data..."
 msgstr ""
 
+msgid "Ondemand governor"
+msgstr ""
+
+msgid "Ondemand tunables"
+msgstr ""
+
 msgid "Performance managment"
 msgstr ""
 
@@ -76,11 +103,13 @@ msgstr ""
 msgid "Scaling governor"
 msgstr ""
 
-msgid ""
-"Scaling governors implement algorithms to estimate the required CPU capacity."
+msgid "Scaling governors implement algorithms to estimate the required CPU capacity."
 msgstr ""
 
 msgid "Service action failed \"%s %s\": %s"
+msgstr ""
+
+msgid "Threshold value (in percent) used to determine the frequency change direction."
 msgstr ""
 
 msgid "default value:"

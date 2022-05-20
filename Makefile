@@ -6,7 +6,7 @@
 
 include $(TOPDIR)/rules.mk
 
-PKG_VERSION:=0.3-0
+PKG_VERSION:=0.4-0
 LUCI_TITLE:=CPU performance information and management for LuCI
 LUCI_PKGARCH:=all
 PKG_LICENSE:=MIT

@@ -3,7 +3,9 @@
 local json = require "luci.jsonc"
 local fs   = require "nixio.fs"
 
-local sysCpuDir = "/sys/devices/system/cpu"
+local sysCpuDir          = "/sys/devices/system/cpu"
+local sysOndemandDir     = sysCpuDir .. "/cpufreq/ondemand"
+local sysConservativeDir = sysCpuDir .. "/cpufreq/conservative"
 
 local function readFile(path)
 	local s = fs.readfile(path)
@@ -29,8 +31,29 @@ local function parseMultiValue(s, number)
 end
 
 local function readCpuPerf()
-	local cpuPerf = {}
-	local cpuDir  = fs.dir(sysCpuDir)
+	local cpuPerf      = {}
+	local ondemand     = {}
+	local conservative = {}
+	local cpus         = {}
+	if fs.stat(sysOndemandDir, "type") == "dir" then
+		local upThreshold   = tonumber(readFile(sysOndemandDir .. "/up_threshold"))
+		local ignNiceLoad   = tonumber(readFile(sysOndemandDir .. "/ignore_nice_load"))
+		local smpDownFactor = tonumber(readFile(sysOndemandDir .. "/sampling_down_factor"))
+		ondemand["smpDownFactor"] = smpDownFactor
+		ondemand["ignNiceLoad"]   = ignNiceLoad
+		ondemand["upThreshold"]   = upThreshold
+		cpuPerf["ondemand"] = ondemand
+	end
+	if fs.stat(sysConservativeDir, "type") == "dir" then
+		local freqStep      = tonumber(readFile(sysConservativeDir .. "/freq_step"))
+		local downThreshold = tonumber(readFile(sysConservativeDir .. "/down_threshold"))
+		local smpDownFactor = tonumber(readFile(sysConservativeDir .. "/sampling_down_factor"))
+		conservative["freqStep"]      = freqStep
+		conservative["downThreshold"] = downThreshold
+		conservative["smpDownFactor"] = smpDownFactor
+		cpuPerf["conservative"] = conservative
+	end
+	local cpuDir   = fs.dir(sysCpuDir)
 	if cpuDir then
 		for item in cpuDir do
 			if item:match("^cpu[0-9]+$") then
@@ -53,7 +76,7 @@ local function readCpuPerf()
 						sAvailGovernors = parseMultiValue(sAvailGovernors)
 					end
 					if dNumber ~= nil then
-						cpuPerf[dNumber] = {
+						cpus[dNumber] = {
 							number          = tonumber(dNumber),
 							sCurFreq        = sCurFreq,
 							curFreq         = curFreq,
@@ -69,6 +92,7 @@ local function readCpuPerf()
 				end
 			end
 		end
+		cpuPerf["cpus"] = cpus
 	end
 	io.write(json.stringify(cpuPerf))
 end

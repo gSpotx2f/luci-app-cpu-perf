@@ -65,23 +65,6 @@ return view.extend({
 		});
 	},
 
-	updateCpuPerfData: function() {
-		this.callCpuPerf().then((data) => {
-			for(let i of Object.values(data)) {
-				document.getElementById('cpu' + i.number + 'number').textContent   =
-					_('CPU') + ' ' + i.number;
-				document.getElementById('cpu' + i.number + 'curFreq').textContent  =
-					(i.sCurFreq) ? this.freqFormat(i.sCurFreq) : this.freqFormat(i.curFreq);
-				document.getElementById('cpu' + i.number + 'minFreq').textContent  =
-					(i.sMinFreq) ? this.freqFormat(i.sMinFreq) : this.freqFormat(i.minFreq)
-				document.getElementById('cpu' + i.number + 'maxFreq').textContent  =
-					(i.sMaxFreq) ? this.freqFormat(i.sMaxFreq) : this.freqFormat(i.maxFreq);
-				document.getElementById('cpu' + i.number + 'governor').textContent =
-					i.governor || '-';
-			};
-		}).catch(e => {});
-	},
-
 	freqFormat : function(freq) {
 		if(!freq) {
 			return '-';
@@ -90,6 +73,43 @@ return view.extend({
 			(freq / 1e6) + ' ' + _('GHz')
 		:
 			(freq / 1e3) + ' ' + _('MHz');
+	},
+
+	updateCpuPerfData: function() {
+		this.callCpuPerf().then((data) => {
+			if(data.cpus) {
+				for(let i of Object.values(data.cpus)) {
+					document.getElementById('cpu' + i.number + 'number').textContent   =
+						_('CPU') + ' ' + i.number;
+					document.getElementById('cpu' + i.number + 'curFreq').textContent  =
+						(i.sCurFreq) ? this.freqFormat(i.sCurFreq) : this.freqFormat(i.curFreq);
+					document.getElementById('cpu' + i.number + 'minFreq').textContent  =
+						(i.sMinFreq) ? this.freqFormat(i.sMinFreq) : this.freqFormat(i.minFreq)
+					document.getElementById('cpu' + i.number + 'maxFreq').textContent  =
+						(i.sMaxFreq) ? this.freqFormat(i.sMaxFreq) : this.freqFormat(i.maxFreq);
+					document.getElementById('cpu' + i.number + 'governor').textContent =
+						i.governor || '-';
+				};
+			};
+			if(data.ondemand) {
+				document.getElementById('OdUpThreshold').textContent =
+					data.ondemand.upThreshold || '-';
+				document.getElementById('OdIgnNiceLoad').textContent =
+					(data.ondemand.ignNiceLoad !== undefined) ?
+						data.ondemand.ignNiceLoad : '-';
+				document.getElementById('OdSmpDownFactor').textContent =
+					data.ondemand.smpDownFactor || '-';
+			};
+			if(data.conservative) {
+				document.getElementById('CFreqStep').textContent =
+					(data.conservative.freqStep !== undefined) ?
+						data.conservative.freqStep : '-';
+				document.getElementById('CDownThreshold').textContent =
+					data.conservative.downThreshold || '-';
+				document.getElementById('CSmpDownFactor').textContent =
+					data.conservative.smpDownFactor || '-';
+			};
+		}).catch(e => {});
 	},
 
 	CBIBlockPerf: form.Value.extend({
@@ -123,52 +143,95 @@ return view.extend({
 				])
 			);
 
+			let ondemandTable, conservativeTable;
+
 			if(this.perfData) {
-				for(let i of Object.values(this.perfData)) {
-					cpuTable.append(
+				if(this.perfData.cpus) {
+					for(let i of Object.values(this.perfData.cpus)) {
+						cpuTable.append(
+							E('tr', { 'class': 'tr' }, [
+								E('td', {
+									'id': 'cpu' + i.number + 'number',
+									'class': 'td left',
+									'data-title': cpuTableTitles[0],
+								}, _('CPU') + ' ' + i.number),
+								E('td', {
+									'id': 'cpu' + i.number + 'curFreq',
+									'class': 'td center',
+									'data-title': cpuTableTitles[1],
+								}, (i.sCurFreq) ?
+										this.ctx.freqFormat(i.sCurFreq)
+									:
+										this.ctx.freqFormat(i.curFreq)
+								),
+								E('td', {
+									'id': 'cpu' + i.number + 'minFreq',
+									'class': 'td center',
+									'data-title': cpuTableTitles[2],
+								}, (i.sMinFreq) ?
+										this.ctx.freqFormat(i.sMinFreq)
+									:
+										this.ctx.freqFormat(i.minFreq)
+								),
+								E('td', {
+									'id': 'cpu' + i.number + 'maxFreq',
+									'class': 'td center',
+									'data-title': cpuTableTitles[3],
+								}, (i.sMaxFreq) ?
+										this.ctx.freqFormat(i.sMaxFreq)
+									:
+										this.ctx.freqFormat(i.maxFreq)
+								),
+								E('td', {
+									'id': 'cpu' + i.number + 'governor',
+									'class': 'td center',
+									'data-title': cpuTableTitles[4],
+								}, i.governor || '-'),
+							])
+						);
+					};
+				};
+				if(this.perfData.ondemand) {
+					ondemandTable = E('table', { 'class': 'table' }, [
 						E('tr', { 'class': 'tr' }, [
-							E('td', {
-								'id': 'cpu' + i.number + 'number',
-								'class': 'td left',
-								'data-title': cpuTableTitles[0],
-							}, _('CPU') + ' ' + i.number),
-							E('td', {
-								'id': 'cpu' + i.number + 'curFreq',
-								'class': 'td center',
-								'data-title': cpuTableTitles[1],
-							}, (i.sCurFreq) ?
-									this.ctx.freqFormat(i.sCurFreq)
-								:
-									this.ctx.freqFormat(i.curFreq)
-							),
-							E('td', {
-								'id': 'cpu' + i.number + 'minFreq',
-								'class': 'td center',
-								'data-title': cpuTableTitles[2],
-							}, (i.sMinFreq) ?
-									this.ctx.freqFormat(i.sMinFreq)
-								:
-									this.ctx.freqFormat(i.minFreq)
-							),
-							E('td', {
-								'id': 'cpu' + i.number + 'maxFreq',
-								'class': 'td center',
-								'data-title': cpuTableTitles[3],
-							}, (i.sMaxFreq) ?
-									this.ctx.freqFormat(i.sMaxFreq)
-								:
-									this.ctx.freqFormat(i.maxFreq)
-							),
-							E('td', {
-								'id': 'cpu' + i.number + 'governor',
-								'class': 'td center',
-								'data-title': cpuTableTitles[4],
-							}, i.governor || '-'),
-						])
-					);
+							E('td', { 'class': 'td left' }, _("up_threshold")),
+							E('td', { 'id': 'OdUpThreshold', 'class': 'td left' },
+								this.perfData.ondemand.upThreshold || '-'),
+						]),
+						E('tr', { 'class': 'tr' }, [
+							E('td', { 'class': 'td left' }, _("ignore_nice_load")),
+							E('td', { 'id': 'OdIgnNiceLoad', 'class': 'td left' },
+								(this.perfData.ondemand.ignNiceLoad !== undefined) ?
+									this.perfData.ondemand.ignNiceLoad : '-'),
+						]),
+						E('tr', { 'class': 'tr' }, [
+							E('td', { 'class': 'td left', 'style':'min-width:33%' }, _("sampling_down_factor")),
+							E('td', { 'id': 'OdSmpDownFactor', 'class': 'td left' },
+								this.perfData.ondemand.smpDownFactor || '-'),
+						]),
+					]);
+				};
+				if(this.perfData.conservative) {
+					conservativeTable = E('table', { 'class': 'table' }, [
+						E('tr', { 'class': 'tr' }, [
+							E('td', { 'class': 'td left' }, _("freq_step")),
+							E('td', { 'id': 'CFreqStep', 'class': 'td left' },
+								(this.perfData.conservative.freqStep !== undefined) ?
+									this.perfData.conservative.freqStep : '-'),
+						]),
+						E('tr', { 'class': 'tr' }, [
+							E('td', { 'class': 'td left' }, _("down_threshold")),
+							E('td', { 'id': 'CDownThreshold', 'class': 'td left' },
+								this.perfData.conservative.downThreshold || '-'),
+						]),
+						E('tr', { 'class': 'tr' }, [
+							E('td', { 'class': 'td left', 'style':'min-width:33%' }, _("sampling_down_factor")),
+							E('td', { 'id': 'CSmpDownFactor', 'class': 'td left' },
+								this.perfData.conservative.smpDownFactor || '-'),
+						]),
+					]);
 				};
 			};
-
 			if(cpuTable.childNodes.length === 1){
 				cpuTable.append(
 					E('tr', { 'class': 'tr placeholder' },
@@ -178,7 +241,20 @@ return view.extend({
 					)
 				);
 			};
-			return cpuTable;
+			let tables = [ cpuTable ];
+			if(ondemandTable) {
+				tables.push(
+					E('h3', {}, _("Ondemand tunables")),
+					ondemandTable
+				);
+			};
+			if(conservativeTable) {
+				tables.push(
+					E('h3', {}, _("Conservative tunables")),
+					conservativeTable,
+				);
+			};
+			return E(tables);
 		},
 	}),
 
@@ -257,6 +333,7 @@ return view.extend({
 
 		this.initStatus      = data[0];
 		let cpuPerfDataArray = data[1];
+		let cpuDataArray     = cpuPerfDataArray.cpus || {};
 
 		let s, o;
 		let m = new form.Map(this.appName,
@@ -281,6 +358,74 @@ return view.extend({
 		// init button
 		o = s.option(this.CBIBlockInitButton, this);
 
+		/* Ondemand governor */
+
+		s = m.section(form.NamedSection, 'ondemand', 'governor',
+			_("Ondemand governor"));
+
+		// up_threshold
+		o = s.option(form.Value,
+			'up_threshold', _('up_threshold'),
+			_('If the estimated CPU load is above this value (in percent), the governor will set the frequency to the maximum value.')
+		);
+		o.rmempty     = true;
+		o.optional    = true;
+		o.placeholder = '1-100';
+		o.datatype    = 'and(integer,range(1,100))';
+
+		// ignore_nice_load
+		o = s.option(form.Flag,
+			'ignore_nice_load', _('ignore_nice_load'),
+			_('If checked, it will cause the CPU load estimation code to treat the CPU time spent on executing tasks with "nice" levels greater than 0 as CPU idle time.')
+		);
+		o.rmempty  = true;
+		o.optional = true;
+
+		// sampling_down_factor
+		o = s.option(form.Value,
+			'sampling_down_factor', _('sampling_down_factor'),
+			_('Frequency decrease deferral factor.')
+		);
+		o.rmempty     = true;
+		o.optional    = true;
+		o.placeholder = '1-100';
+		o.datatype    = 'and(integer,range(1,100))';
+
+		/* Conservative governor*/
+
+		s = m.section(form.NamedSection, 'conservative', 'governor',
+			_("Conservative governor"));
+
+		// freq_step
+		o = s.option(form.Value,
+			'freq_step', _('freq_step'),
+			_('Frequency step in percent of the maximum frequency the governor is allowed to set.')
+		);
+		o.rmempty     = true;
+		o.optional    = true;
+		o.placeholder = '1-100';
+		o.datatype    = 'and(integer,range(1,100))';
+
+		// down_threshold
+		o = s.option(form.Value,
+			'down_threshold', _('down_threshold'),
+			_('Threshold value (in percent) used to determine the frequency change direction.')
+		);
+		o.rmempty     = true;
+		o.optional    = true;
+		o.placeholder = '1-100';
+		o.datatype    = 'and(integer,range(1,100))';
+
+		// sampling_down_factor
+		o = s.option(form.Value,
+			'sampling_down_factor', _('sampling_down_factor'),
+			_('Frequency decrease deferral factor.')
+		);
+		o.rmempty     = true;
+		o.optional    = true;
+		o.placeholder = '1-10';
+		o.datatype    = 'and(integer,range(1,10))';
+
 		/* CPUs settings */
 
 		let sections = uci.sections(this.appName, 'cpu');
@@ -300,9 +445,9 @@ return view.extend({
 				let s = m.section(form.NamedSection, sectionName, 'cpu',
 					_('CPU') + ' ' + cpuNum);
 
-				if(cpuPerfDataArray[cpuNum]) {
-					if(cpuPerfDataArray[cpuNum].sAvailGovernors &&
-					   cpuPerfDataArray[cpuNum].sAvailGovernors.length > 0) {
+				if(cpuDataArray[cpuNum]) {
+					if(cpuDataArray[cpuNum].sAvailGovernors &&
+					   cpuDataArray[cpuNum].sAvailGovernors.length > 0) {
 
 						// scaling_governor
 						o = s.option(form.ListValue,
@@ -311,36 +456,71 @@ return view.extend({
 						);
 						o.rmempty  = true;
 						o.optional = true;
-						cpuPerfDataArray[cpuNum].sAvailGovernors.forEach(e => o.value(e));
+						cpuDataArray[cpuNum].sAvailGovernors.forEach(e => o.value(e));
 					};
 
-					if(cpuPerfDataArray[cpuNum].sAvailFreqs &&
-					   cpuPerfDataArray[cpuNum].sAvailFreqs.length > 0) {
-						let availFreqs = cpuPerfDataArray[cpuNum].sAvailFreqs.map(e =>
-							[ e, this.freqFormat(e) ]
-						);
+					if(cpuDataArray[cpuNum].sMinFreq && cpuDataArray[cpuNum].sMaxFreq &&
+						cpuDataArray[cpuNum].minFreq && cpuDataArray[cpuNum].maxFreq) {
 
-						// scaling_min_freq
-						let minFreq = s.option(form.ListValue,
-							'scaling_min_freq', _('Minimum scaling frequency'),
-							_('Minimum frequency the CPU is allowed to be running.') +
-								' ('  + _('default value:') + ' <code>' +
-								this.freqFormat(cpuPerfDataArray[cpuNum].minFreq) + '</code>).'
-						);
-						minFreq.rmempty  = true;
-						minFreq.optional = true;
-						availFreqs.forEach(e => minFreq.value(e[0], e[1]));
+						let minFreq, maxFreq;
 
-						// scaling_max_freq
-						let maxFreq = s.option(form.ListValue,
-							'scaling_max_freq', _('Maximum scaling frequency'),
-							_('Maximum frequency the CPU is allowed to be running.') +
-								' ('  + _('default value:') + ' <code>' +
-								this.freqFormat(cpuPerfDataArray[cpuNum].maxFreq) + '</code>).'
-						);
-						maxFreq.rmempty  = true;
-						maxFreq.optional = true;
-						availFreqs.forEach(e => maxFreq.value(e[0], e[1]));
+						if(cpuDataArray[cpuNum].sAvailFreqs &&
+						   cpuDataArray[cpuNum].sAvailFreqs.length > 0) {
+							let availFreqs = cpuDataArray[cpuNum].sAvailFreqs.map(e =>
+								[ e, this.freqFormat(e) ]
+							);
+
+							// scaling_min_freq
+							minFreq = s.option(form.ListValue,
+								'scaling_min_freq', _('Minimum scaling frequency'),
+								_('Minimum frequency the CPU is allowed to be running.') +
+									' ('  + _('default value:') + ' <code>' +
+									this.freqFormat(cpuDataArray[cpuNum].minFreq) + '</code>).'
+							);
+							minFreq.rmempty  = true;
+							minFreq.optional = true;
+
+							// scaling_max_freq
+							maxFreq = s.option(form.ListValue,
+								'scaling_max_freq', _('Maximum scaling frequency'),
+								_('Maximum frequency the CPU is allowed to be running.') +
+									' ('  + _('default value:') + ' <code>' +
+									this.freqFormat(cpuDataArray[cpuNum].maxFreq) + '</code>).'
+							);
+							maxFreq.rmempty  = true;
+							maxFreq.optional = true;
+
+							availFreqs.forEach(e => {
+								minFreq.value(e[0], e[1]);
+								maxFreq.value(e[0], e[1]);
+							});
+
+						} else {
+
+							// scaling_min_freq
+							minFreq = s.option(form.Value,
+								'scaling_min_freq', `${_('Minimum scaling frequency')} (${_('KHz')})`,
+								_('Minimum frequency the CPU is allowed to be running.') +
+									' ('  + _('default value:') + ' <code>' +
+									cpuDataArray[cpuNum].minFreq + '</code>).'
+							);
+							minFreq.rmempty     = true;
+							minFreq.optional    = true;
+							minFreq.datatype    = `and(integer,range(${cpuDataArray[cpuNum].minFreq},${cpuDataArray[cpuNum].maxFreq}))`;
+							minFreq.placeholder = `${cpuDataArray[cpuNum].minFreq}-${cpuDataArray[cpuNum].maxFreq} ${_('KHz')}`;
+
+							// scaling_max_freq
+							maxFreq = s.option(form.Value,
+								'scaling_max_freq', `${_('Maximum scaling frequency')} (${_('KHz')})`,
+								_('Maximum frequency the CPU is allowed to be running.') +
+									' ('  + _('default value:') + ' <code>' +
+									cpuDataArray[cpuNum].maxFreq + '</code>).'
+							);
+							maxFreq.rmempty     = true;
+							maxFreq.optional    = true;
+							maxFreq.datatype    = `and(integer,range(${cpuDataArray[cpuNum].minFreq},${cpuDataArray[cpuNum].maxFreq}))`;
+							maxFreq.placeholder = `${cpuDataArray[cpuNum].minFreq}-${cpuDataArray[cpuNum].maxFreq} ${_('KHz')}`;
+						};
 
 						minFreq.validate = L.bind(
 							function(section_id, value) {
@@ -357,11 +537,11 @@ return view.extend({
 					};
 				};
 
-				if(!cpuPerfDataArray[cpuNum] ||
-				   !(cpuPerfDataArray[cpuNum].sAvailGovernors &&
-				   cpuPerfDataArray[cpuNum].sAvailGovernors.length > 0) &&
-				   !(cpuPerfDataArray[cpuNum].sAvailFreqs &&
-				   cpuPerfDataArray[cpuNum].sAvailFreqs.length > 0)) {
+				if(!cpuDataArray[cpuNum] ||
+				   !(cpuDataArray[cpuNum].sAvailGovernors &&
+				   cpuDataArray[cpuNum].sAvailGovernors.length > 0) &&
+				   !(cpuDataArray[cpuNum].sMinFreq && cpuDataArray[cpuNum].sMaxFreq &&
+					 cpuDataArray[cpuNum].minFreq && cpuDataArray[cpuNum].maxFreq)) {
 					o         = s.option(form.DummyValue, '_dummy');
 					o.rawhtml = true;
 					o.default = '<label class="cbi-value-title"></label><div class="cbi-value-field"><em>' +

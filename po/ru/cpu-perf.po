@@ -25,10 +25,16 @@ msgid "CPU performance information and management."
 msgstr "Информация о производительности процессора и управление ею."
 
 msgid "CPU performance scaling not available..."
-msgstr "Масштабирования производительности ЦПУ недоступно..."
+msgstr "Масштабирование производительности ЦПУ недоступно..."
 
 msgid "Command failed"
 msgstr "Команда не выполнена"
+
+msgid "Conservative governor"
+msgstr "Регулятор conservative"
+
+msgid "Conservative tunables"
+msgstr "Настройки conservative"
 
 msgid "Current frequency"
 msgstr "Текущая частота"
@@ -45,11 +51,26 @@ msgstr "Включено"
 msgid "Failed to get %s init status: %s"
 msgstr "Не удалось получить статус инициализации %s: %s"
 
+msgid "Frequency decrease deferral factor."
+msgstr "Коэффициент отсрочки уменьшения частоты."
+
+msgid "Frequency step in percent of the maximum frequency the governor is allowed to set."
+msgstr "Шаг частоты в процентах от максимальной частоты, которую может установить регулятор."
+
 msgid "Frequency value must not be"
 msgstr "Значение частоты не должно быть"
 
 msgid "GHz"
 msgstr "ГГц"
+
+msgid "If checked, it will cause the CPU load estimation code to treat the CPU time spent on executing tasks with \"nice\" levels greater than 0 as CPU idle time."
+msgstr "Если включено, код оценки загрузки ЦПУ будет рассматривать время ЦПУ, затрачиваемое на выполнение задач с уровнями \"nice\" выше 0, как время простоя ЦПУ."
+
+msgid "If the estimated CPU load is above this value (in percent), the governor will set the frequency to the maximum value."
+msgstr "Если расчетная загрузка ЦПУ выше этого значения (в процентах), регулятор установит максимальное значение частоты."
+
+msgid "KHz"
+msgstr "КГц"
 
 msgid "MHz"
 msgstr "МГц"
@@ -75,6 +96,12 @@ msgstr "Минимальное масштабирование частоты"
 msgid "No performance data..."
 msgstr "Нет данных о производительности..."
 
+msgid "Ondemand governor"
+msgstr "Регулятор ondemand"
+
+msgid "Ondemand tunables"
+msgstr "Настройки ondemand"
+
 msgid "Performance managment"
 msgstr "Управление производительностью"
 
@@ -87,12 +114,14 @@ msgstr "Запуск при старте системы"
 msgid "Scaling governor"
 msgstr "Регулятор масштабирования"
 
-msgid ""
-"Scaling governors implement algorithms to estimate the required CPU capacity."
+msgid "Scaling governors implement algorithms to estimate the required CPU capacity."
 msgstr "Регуляторы масштабирования реализуют алгоритмы для оценки требуемой мощности ЦПУ."
 
 msgid "Service action failed \"%s %s\": %s"
 msgstr "Не удалось выполнить действие службы \"%s %s\": %s"
+
+msgid "Threshold value (in percent) used to determine the frequency change direction."
+msgstr "Пороговое значение (в процентах), используемое для определения направления изменения частоты."
 
 msgid "default value:"
 msgstr "стандартное значение:"
