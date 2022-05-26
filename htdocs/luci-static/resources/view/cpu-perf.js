@@ -292,13 +292,17 @@ return view.extend({
 				}),
 			}, (!this.ctx.initStatus) ? _('Disabled') : _('Enabled'));
 
-			return E( [
-				E('label', { 'class': 'cbi-value-title' },
+			return E([
+				E('label', { 'class': 'cbi-value-title', 'for': 'initButton' },
 					_('Run at startup')
 				),
-				E('div', { 'class': 'cbi-value-field' },
-					this.ctx.initButton
-				),
+				E('div', { 'class': 'cbi-value-field' }, [
+					E('div', {}, this.ctx.initButton),
+					E('input', {
+						'id'  : 'initButton',
+						'type': 'hidden',
+					}),
+				]),
 			]);
 		},
 	}),
