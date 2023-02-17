@@ -66,6 +66,16 @@ return baseclass.extend({
 			};
 		};
 
+		if(cpuTable.childNodes.length === 1){
+			cpuTable.append(
+				E('tr', { 'class': 'tr placeholder' },
+					E('td', { 'class': 'td' },
+						E('em', {}, _('No performance data...'))
+					)
+				)
+			);
+		};
+
 		return cpuTable;
 	},
 });
