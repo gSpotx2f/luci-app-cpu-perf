@@ -3,6 +3,8 @@ CPU performance information and management for LuCI (OpenWrt webUI).
 
 OpenWrt >= 19.07.5.
 
+**Dependences:** lua, luci-lib-nixio, luci-lib-jsonc.
+
 ## Installation notes
 
 **OpenWrt Snapshot:**
