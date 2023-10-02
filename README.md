@@ -7,7 +7,7 @@ OpenWrt >= 19.07.5.
 
 ## Installation notes
 
-**OpenWrt >= 19.07:**
+**OpenWrt >= 19.07.5:**
 
     wget --no-check-certificate -O /tmp/luci-app-cpu-perf_0.4-0_all.ipk https://github.com/gSpotx2f/packages-openwrt/raw/master/current/luci-app-cpu-perf_0.4-0_all.ipk
     opkg install /tmp/luci-app-cpu-perf_0.4-0_all.ipk
