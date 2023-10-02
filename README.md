@@ -23,7 +23,7 @@ i18n-ru:
 
 **OpenWrt 19.07, 21.02, 22.03:**
 
-    wget --no-check-certificate -O /tmp/luci-app-cpu-perf_0.4-0_all.ipk https://github.com/gSpotx2f/packages-openwrt/raw/master/current/luci-app-cpu-perf_0.4-0_all.ipk
+    wget --no-check-certificate -O /tmp/luci-app-cpu-perf_0.4-0_all.ipk https://github.com/gSpotx2f/packages-openwrt/raw/master/22.03/luci-app-cpu-perf_0.4-0_all.ipk
     opkg install /tmp/luci-app-cpu-perf_0.4-0_all.ipk
     rm /tmp/luci-app-cpu-perf_0.4-0_all.ipk
     /etc/init.d/rpcd restart
@@ -31,7 +31,7 @@ i18n-ru:
 
 i18n-ru:
 
-    wget --no-check-certificate -O /tmp/luci-i18n-cpu-perf-ru_0.4-0_all.ipk https://github.com/gSpotx2f/packages-openwrt/raw/master/current/luci-i18n-cpu-perf-ru_0.4-0_all.ipk
+    wget --no-check-certificate -O /tmp/luci-i18n-cpu-perf-ru_0.4-0_all.ipk https://github.com/gSpotx2f/packages-openwrt/raw/master/22.03/luci-i18n-cpu-perf-ru_0.4-0_all.ipk
     opkg install /tmp/luci-i18n-cpu-perf-ru_0.4-0_all.ipk
     rm /tmp/luci-i18n-cpu-perf-ru_0.4-0_all.ipk
 
