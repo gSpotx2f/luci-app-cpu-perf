@@ -136,10 +136,10 @@ return view.extend({
 			let cpuTable = E('table', { 'class': 'table' },
 				E('tr', { 'class': 'tr table-titles' }, [
 					E('th', { 'class': 'th left' }, cpuTableTitles[0]),
-					E('th', { 'class': 'th center' }, cpuTableTitles[1]),
-					E('th', { 'class': 'th center' }, cpuTableTitles[2]),
-					E('th', { 'class': 'th center' }, cpuTableTitles[3]),
-					E('th', { 'class': 'th center' }, cpuTableTitles[4]),
+					E('th', { 'class': 'th left' }, cpuTableTitles[1]),
+					E('th', { 'class': 'th left' }, cpuTableTitles[2]),
+					E('th', { 'class': 'th left' }, cpuTableTitles[3]),
+					E('th', { 'class': 'th left' }, cpuTableTitles[4]),
 				])
 			);
 
@@ -157,7 +157,7 @@ return view.extend({
 								}, _('CPU') + ' ' + i.number),
 								E('td', {
 									'id': 'cpu' + i.number + 'curFreq',
-									'class': 'td center',
+									'class': 'td left',
 									'data-title': cpuTableTitles[1],
 								}, (i.sCurFreq) ?
 										this.ctx.freqFormat(i.sCurFreq)
@@ -166,7 +166,7 @@ return view.extend({
 								),
 								E('td', {
 									'id': 'cpu' + i.number + 'minFreq',
-									'class': 'td center',
+									'class': 'td left',
 									'data-title': cpuTableTitles[2],
 								}, (i.sMinFreq) ?
 										this.ctx.freqFormat(i.sMinFreq)
@@ -175,7 +175,7 @@ return view.extend({
 								),
 								E('td', {
 									'id': 'cpu' + i.number + 'maxFreq',
-									'class': 'td center',
+									'class': 'td left',
 									'data-title': cpuTableTitles[3],
 								}, (i.sMaxFreq) ?
 										this.ctx.freqFormat(i.sMaxFreq)
@@ -184,7 +184,7 @@ return view.extend({
 								),
 								E('td', {
 									'id': 'cpu' + i.number + 'governor',
-									'class': 'td center',
+									'class': 'td left',
 									'data-title': cpuTableTitles[4],
 								}, i.governor || '-'),
 							])
