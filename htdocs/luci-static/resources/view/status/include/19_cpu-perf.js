@@ -11,7 +11,7 @@ return baseclass.extend({
 		expect: { '': {} }
 	}),
 
-	freqFormat : function(freq) {
+	freqFormat(freq) {
 		if(!freq) {
 			return '-';
 		};
@@ -21,11 +21,11 @@ return baseclass.extend({
 			(freq / 1e3) + ' ' + _('MHz');
 	},
 
-	load       : function() {
+	load() {
 		return L.resolveDefault(this.callCpuPerf(), null);
 	},
 
-	render     : function(data) {
+	render(data) {
 		if(!data) return;
 
 		let cpuTableTitles = [
