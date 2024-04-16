@@ -342,7 +342,7 @@ return view.extend({
 		let s, o;
 		let m = new form.Map(this.appName,
 			_('CPU Performance'),
-			_('CPU performance information and management.'));
+			_('CPU performance management.'));
 
 		/* Status */
 

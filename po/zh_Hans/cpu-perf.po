@@ -10,8 +10,8 @@ msgstr "CPU"
 msgid "CPU Performance"
 msgstr "CPU 性能"
 
-msgid "CPU performance information and management."
-msgstr "CPU性能信息和管理"
+msgid "CPU performance management."
+msgstr "CPU性能管理"
 
 msgid "CPU performance scaling not available..."
 msgstr "CPU 性能扩展不可用.."

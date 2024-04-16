@@ -21,8 +21,8 @@ msgstr "ЦПУ"
 msgid "CPU Performance"
 msgstr "Производительность ЦПУ"
 
-msgid "CPU performance information and management."
-msgstr "Информация о производительности процессора и управление ею."
+msgid "CPU performance management."
+msgstr "Управление производительностью процессора."
 
 msgid "CPU performance scaling not available..."
 msgstr "Масштабирование производительности ЦПУ недоступно..."

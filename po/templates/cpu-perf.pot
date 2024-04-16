@@ -10,7 +10,7 @@ msgstr ""
 msgid "CPU Performance"
 msgstr ""
 
-msgid "CPU performance information and management."
+msgid "CPU performance management."
 msgstr ""
 
 msgid "CPU performance scaling not available..."
