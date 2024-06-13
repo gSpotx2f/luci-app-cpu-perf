@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2022 gSpot (https://github.com/gSpotx2f/luci-app-cpu-perf)
+# Copyright (C) 2024 gSpot (https://github.com/gSpotx2f/luci-app-cpu-perf)
 #
 # This is free software, licensed under the MIT License.
 #
