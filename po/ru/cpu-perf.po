@@ -103,7 +103,7 @@ msgid "Minimum scaling frequency"
 msgstr "Минимальное масштабирование частоты"
 
 msgid "No CPU frequency data available..."
-msgstr "Нет данных о данных о частоте процессора..."
+msgstr "Нет данных о частоте процессора..."
 
 msgid "No performance data..."
 msgstr "Нет данных о производительности..."
