@@ -34,8 +34,8 @@ EAS_DEF=1
 config_load $APP_NAME
 
 get_cpu_freq_policies() {
+	[ ! -d "$SYSFS_CPU_FREQ_DIR" ] && return
 	echo $(ls "$SYSFS_CPU_FREQ_DIR" | grep "^policy[0-9]*$")
-
 }
 
 reset_cpu_freq_policy_config() {
@@ -67,7 +67,7 @@ set_cpu_freq_policy() {
 	local scaling_min_freq scaling_max_freq scaling_governor
 	local policy_dir="${SYSFS_CPU_FREQ_DIR}/${policy}"
 
-	[ ! -d $policy_dir ] && return
+	[ ! -d "$policy_dir" ] && return
 
 	local scaling_min_freq_file="${policy_dir}/scaling_min_freq"
 	local scaling_max_freq_file="${policy_dir}/scaling_max_freq"
@@ -92,7 +92,7 @@ reset_cpu_freq_policy() {
 	local policy="$1"
 	local policy_dir="${SYSFS_CPU_FREQ_DIR}/${policy}"
 
-	[ ! -d $policy_dir ] && return
+	[ ! -d "$policy_dir" ] && return
 
 	local min_freq_file="${policy_dir}/cpuinfo_min_freq"
 	local max_freq_file="${policy_dir}/cpuinfo_max_freq"
