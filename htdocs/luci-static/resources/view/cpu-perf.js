@@ -42,7 +42,9 @@ return view.extend({
 			}
 		}).catch(e => {
 			ui.addNotification(null,
-				E('p', _('Failed to get %s init status: %s').format(this.appName, e)));
+				E('p', _('Failed to get %s init status: %s').format(this.appName, e)),
+				'warning'
+			);
 		});
 	},
 
@@ -54,7 +56,9 @@ return view.extend({
 			return true;
 		}).catch(e => {
 			ui.addNotification(null,
-				E('p', _('Service action failed "%s %s": %s').format(this.appName, action, e)));
+				E('p', _('Service action failed "%s %s": %s').format(this.appName, action, e)),
+				'warning'
+			);
 		});
 	},
 
@@ -390,7 +394,10 @@ return view.extend({
 			this.callCpuPerf(),
 			uci.load(this.appName),
 		]).catch(e => {
-			ui.addNotification(null, E('p', _('An error has occurred') + ': %s'.format(e.message)));
+			ui.addNotification(null,
+				E('p', _('An error has occurred') + ': %s'.format(e.message)),
+				'warning'
+			);
 		});
 	},
 
